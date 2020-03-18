@@ -1,19 +1,11 @@
 class User < ApplicationRecord
-    attr_accessor :password
- 
-    def authenticate(plaintext_password)
-      if BCrypt::Password.new(self.password_digest) == plaintext_password
-        self
-      else
-        false
-      end
-    end
-
     has_secure_password
+
     validates :name, presence: true
-    validates :name, uniqueness: true
     validates :email, presence: true
     validates :email, uniqueness: true
+
+    validates_format_of :email, :with => /\A([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})\z/i
 
     has_many :friendships
     has_many :friends, :through => :friendships
