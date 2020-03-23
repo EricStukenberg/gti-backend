@@ -1,22 +1,23 @@
 class AuthController < ApplicationController
-  # skip_before_action :authorized, only: [:create]
- 
-  # def create
-  #   @user = User.find_by(username: user_login_params[:username])
-  #   #User#authenticate comes from BCrypt
-  #   if @user && @user.authenticate(user_login_params[:password])
-  #     # encode token comes from ApplicationController
-  #     token = encode_token({ user_id: @user.id })
-  #     render json: { user: UserSerializer.new(@user), jwt: token }, status: :accepted
-  #   else
-  #     render json: { message: 'Invalid username or password' }, status: :unauthorized
-  #   end
-  # end
- 
-  # private
- 
-  # def user_login_params
-  #   # params { user: {username: 'Chandler Bing', password: 'hi' } }
-  #   params.require(:user).permit(:username, :password)
-  # end
+  # Login
+  def create
+
+    user = User.find_by(email: params[:email])
+    if user && user.authenticate(params[:password])
+      # issue that user a token\
+      token = issue_token(user)
+      render json: {id: user.id, username: user.username, email: user.email, jwt: token}
+    else
+      render json: {error: 'That user could not be found'}, status: 401
+    end
+  end
+
+  def show
+    user = User.find_by(id: user_id)
+    if logged_in?
+      render json: { id: user.id, username: user.username, email: user.email }
+    else
+      render json: {error: 'No user could be found'}, status: 401
+    end
+  end
 end

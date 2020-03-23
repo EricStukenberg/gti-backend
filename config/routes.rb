@@ -1,9 +1,8 @@
 Rails.application.routes.draw do
   # get 'auth/create'
 
-  post '/login', to: 'sessions#create'
-  delete '/logout', to: 'sessions#destroy'
-  get '/logged_in', to: 'sessions#is_logged_in?'
+  post '/auth', to: 'auth#create'
+  get '/current_user', to: 'auth#show'
   resources :users
 
 

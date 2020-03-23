@@ -29,11 +29,8 @@ def show
   def create
     @user = User.new(user_params)
     if @user.save
-      login!
-      render json: {
-        status: :created,
-        user: @user
-      }
+      token = issue_token(@user)
+      render json: {id: @user.id, username: @user.username, jwt: token}
     else 
       render json: {
         status: 500,
@@ -46,7 +43,7 @@ def show
 private
   
   def user_params
-    params.require(:user).permit(:name, :email, :winPer, :password, :password_confirmation, :score)
+    params.require(:user).permit(:username, :email, :winPer, :password, :password_confirmation, :score)
   end
 
   # def login!
