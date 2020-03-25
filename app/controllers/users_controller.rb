@@ -38,6 +38,22 @@ def show
       }
     end
   end
+  def edit
+    user = User.find(params[:id])
+end
+
+def update
+    user = User.find(params[:id])
+    user.update(score: params["score"], winPer: params["winPer"])
+    render json: user
+end
+
+def destroy
+  @user = User.find(params[:id])
+  @user.destroy
+
+end
+
 
 
 private
@@ -45,10 +61,4 @@ private
   def user_params
     params.require(:user).permit(:username, :email, :winPer, :password, :password_confirmation, :score)
   end
-
-  # def login!
-  #   session[:user_id] = @user.id
-  # end
-
-  
 end
